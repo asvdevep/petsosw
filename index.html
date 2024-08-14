@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido a petSOS</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial Black', sans-serif;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+        .banner {
+            font-size: 4em;
+            text-transform: uppercase;
+            animation: rotate 20s linear infinite;
+            transform-style: preserve-3d;
+        }
+        @keyframes rotate {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        .banner span {
+            display: inline-block;
+            padding: 0 0.1em;
+            color: #8B4513; /* SaddleBrown color for a stone-like appearance */
+            text-shadow: 
+                0 1px 0 #CCC,
+                0 2px 0 #C9C9C9,
+                0 3px 0 #BBB,
+                0 4px 0 #B9B9B9,
+                0 5px 0 #AAA,
+                0 6px 1px rgba(0,0,0,0.1),
+                0 0 5px rgba(0,0,0,0.1),
+                0 1px 3px rgba(0,0,0,0.3),
+                0 3px 5px rgba(0,0,0,0.2),
+                0 5px 10px rgba(0,0,0,0.25),
+                0 10px 10px rgba(0,0,0,0.2),
+                0 20px 20px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="banner" id="banner"></div>
+
+    <script>
+        const text = "Bienvenido a petSOS rr";
+        const banner = document.getElementById('banner');
+        
+        text.split('').forEach(char => {
+            const span = document.createElement('span');
+            span.textContent = char;
+            banner.appendChild(span);
+        });
+    </script>
+</body>
+</html>
