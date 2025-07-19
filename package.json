@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/asvdevep/petsosw#readme",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "pm2": "^6.0.8",
+    "uuid": "^11.1.0"
   }
 }
