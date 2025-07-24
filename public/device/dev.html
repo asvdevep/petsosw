@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Simulator</title>
+    <link rel="stylesheet" href="dev.css">
+</head>
+<body>
+    <h1>Device Simulator</h1>
+    
+    <div class="panel">
+        <div class="control-group">
+            <label for="deviceId">Device ID (4 bytes)</label>
+            <input type="text" id="deviceId" placeholder="Enter 4-byte device ID" maxlength="4" value="dev1">
+        </div>
+        
+        <div class="control-group">
+            <label for="serverUrl">WebSocket Server URL</label>
+            <input type="text" id="serverUrl" placeholder="wss://yourserver.com/ws/device" value="wss://localhost/ws/device">
+        </div>
+        
+        <button id="connectBtn">Connect</button>
+        <button id="disconnectBtn" disabled>Disconnect</button>
+        
+        <div id="connectionStatus" class="status disconnected">Disconnected</div>
+    </div>
+    
+    <div class="panel">
+        <h2>Location Data (5 bytes)</h2>
+        
+        <div class="control-group">
+            <label>Coordinates</label>
+            <div class="coordinates">
+                <input type="number" id="latitude" placeholder="Latitude" step="0.000001" value="40.7128">
+                <input type="number" id="longitude" placeholder="Longitude" step="0.000001" value="-74.0060">
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label for="flags">Flags (1 byte)</label>
+            <select id="flags">
+                <option value="0">No flags (0x00)</option>
+                <option value="1">Flag 1 (0x01)</option>
+                <option value="2">Flag 2 (0x02)</option>
+                <option value="4">Flag 3 (0x04)</option>
+                <option value="8">Flag 4 (0x08)</option>
+            </select>
+        </div>
+        
+        <button id="sendDataBtn" disabled>Send Location Data</button>
+        <div id="lastSentStatus"></div>
+    </div>
+    
+    <div class="panel">
+        <h2>Commands (1 byte)</h2>
+        
+        <div class="command-buttons">
+            <button id="pingBtn" disabled>Send Ping (0x02)</button>
+            <button id="emergencyBtn" disabled>Emergency (0x04)</button>
+        </div>
+        
+        <div class="control-group" style="margin-top: 20px;">
+            <label>Received Commands</label>
+            <div id="receivedCommands" class="status">No commands received yet</div>
+        </div>
+    </div>
+    
+    <div class="panel">
+        <h2>Connection Log</h2>
+        <div id="log"></div>
+    </div>
+
+    <script src="dev.js"></script>
+</body>
+</html>
