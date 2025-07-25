@@ -3,9 +3,7 @@ exports.get = (req, res) => {
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(
     JSON.stringify({
-      device: Array.from(global.devData.keys()),
-      loc: Array.from(global.devData.values()),
-      //status: 'active'
+      locs: Array.from(global.devData.values()),
     })
   );
 };

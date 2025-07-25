@@ -120,46 +120,44 @@ const server = https.createServer(sslOptions, handleRequest);
 const wss = new WebSocket.Server({ noServer: true });
 
 wss.on("connection", (ws, req) => {
-  const deviceId = new URL(
-    req.url,
-    `wss://${req.headers.host}`
-  ).searchParams.get("id");
-  if (!deviceId) {
-    return ws.close(4001);  //--> Sin Device ID
-  }
 
-  console.log(`📱 Device connected: ${deviceId}`);
-  global.devices.set(deviceId, ws);
-  ws.send(Buffer.from([0x01]));
+  var deviceId;
+//  ws.send(Buffer.from([0x01]));
 
   ws.on("message", (data) => {
-    // Receive Coordinates
-    if (data.length === 5) {
-      // const locationData = {
-      //   lat: data.readInt16BE(0) / 54000,
-      //   lon: data.readInt16BE(2) / 54000,
-      //   flags: data.readUInt8(4),
-      //   timestamp: Date.now(), // Add timestamp for freshness tracking
-      // };
 
+    const now = new Date();
+    now.setHours(now.getHours() - 6); 
+    console.log(data.length,data);
+
+    if (data.length === 4 && !deviceId) {
+      deviceId=Buffer.from(data, 'binary').toString('hex');
+      global.devices.set(deviceId, ws);
+       ws.send(Buffer.from([0x01])); // ACK 01= deviceId registrado
+    }
+    else if (!deviceId) {
+      ws.send(Buffer.from([0x00])); // excp 00=deviceID no registrado
+    }
+    else if (data.length ===2) {  // Comando
+      console.log(`📍 Command from ${deviceId}:`, data);
+      ws.send(Buffer.from([0x01])); // ACK 11= Comando Recibido
+    }
+    else if (data.length === 6) {  // Coordenadas
       const locationData = {
-       lat: data.readInt16BE(0) / 54000,
-       lon: data.readInt16BE(2) / 54000,
-       flags: data.readUInt8(4),
-        timestamp: Date.now(), // Add timestamp for freshness tracking
+      //  lat: data.readInt16BE(0) / 54000,
+      //  lon: data.readInt16BE(2) / 54000,
+      //  flags: data.readUInt8(4),
+        device:deviceId,
+        donde:Buffer.from(data, 'binary').toString('hex'),
+        hora:  now.toISOString(),
       };
-
       global.devData.set(deviceId, locationData);
       console.log(`📍 Data from ${deviceId}:`, locationData);
-
-      ws.send(Buffer.from([0x01])); // ACK
+      ws.send(Buffer.from([0x21])); // ACK 21= Coords recibidas
+    } else {
+       ws.send(Buffer.from([0x10])); // excp 10= Mensaje no identificado
     }
 
-          // Receive Commands
-      if (data.length === 2) {
-         console.log(`📍 Command from ${deviceId}:`, data);
-         ws.send(Buffer.from([0xa1])); // ACK
-      }
 
   });
 
